@@ -4,6 +4,7 @@ from model.sonar import Sonar
 
 class ExampleSonar(Sonar):
     HADOOP_HOME = "/usr/src/hadoop-2.6.0"
+    HADOOP_STREAMING_PATH = "share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar"
 
     def __init__(self):
         self.results = []
@@ -14,37 +15,19 @@ class ExampleSonar(Sonar):
         else:
             return False
 
-    def _get_mapper(self, count):
+    def _get_map_reduce_file(self, count):
         if count == 0:
-            mapper_file = "wordcount/wc_mapper.py"
+            return ["wordcount/wc_mapper.py", "wordcount/wc_reducer.py"]
         else:
-            mapper_file = "average/ave_mapper.py"
-        return mapper_file
+            return ["average/ave_mapper.py", "average/ave_reducer.py"]
 
-    def _get_reducer(self, count):
+    def _get_in_out_file(self, count):
         if count == 0:
-            reducer_file = "wordcount/wc_reducer.py"
+            return ["input/LICENSE.txt", "outputs/wordcount"]
         else:
-            reducer_file = "average/ave_reducer.py"
-        return reducer_file
-    
-    def _get_input_file(self, count):
-        if count == 0:
-            input_file = "input/LICENSE.txt"
-        else:
-            input_file = "outputs/wordcount"
+            return ["outputs/wordcount", "outputs/average"]
 
-        return input_file
-
-    def _get_output_file(self, count):
-        if count == 0:
-            outputs = "outputs/wordcount"
-        else:
-            outputs = "outputs/average"
-
-        return outputs
-
-    def get_cache_files(self, count):
+    def _get_cache_files(self, count):
         if not count == 0:
             return "cache/separate_interval.txt"
 

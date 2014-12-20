@@ -5,7 +5,7 @@ from hadoop.base import HadoopBase
 from hadoop.hadoop_exception import HadoopException
 
 
-class HadopDiskFileSystem(HadoopBase):
+class HadoopDiskFileSystem(HadoopBase):
     __metaclass__ = ABCMeta
 
     def cat(self, file_name):

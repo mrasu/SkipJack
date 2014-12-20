@@ -9,9 +9,7 @@ from hadoop.hadoop_exception import HadoopException
 class HadoopStreaming(HadoopBase):
     __metaclass__ = ABCMeta
 
-    HADOOP_STREAMING_PATH = None
-
-    def _run_hadoop(self, mapper, reducer, input_file, output, cache_file):
+    def _run_hadoop(self, mapper, reducer, input_file, output, cache_file=None):
         hadoop_path = self.get_hadoop_path()
         hadoop_streaming_path = self.get_streaming_path()
 
@@ -28,17 +26,12 @@ class HadoopStreaming(HadoopBase):
             raise HadoopException(str(err))
 
     def get_streaming_path(self):
-        if self.HADOOP_STREAMING_PATH:
-            hadoop_streaming_path = self.HADOOP_STREAMING_PATH
-        else:
-            hadoop_streaming_path = os.path.join(self.HADOOP_HOME, "share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar")
-
-        return hadoop_streaming_path
+        return os.path.join(self.HADOOP_HOME, self.HADOOP_STREAMING_PATH)
 
     def __generage_general_commands(self, cache_file):
         general_option = []
         if cache_file:
-            if isinstance(cache_file, basestring):
+            if isinstance(cache_file, str):
                 general_option.extend(["-files", cache_file])
             else:
                 general_option.extend(["-files", ",".join(cache_file)])
