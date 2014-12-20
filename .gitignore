@@ -57,6 +57,10 @@ target/
 .idea/
 *.iml
 
-# PyDoop
+# Vagrant
+Vagrantfile
+.vagrant/
+
+# SkipJack
 example/outputs/
 example/cache/

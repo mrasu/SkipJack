@@ -13,7 +13,7 @@ class HadoopStreaming(HadoopBase):
         hadoop_path = self.get_hadoop_path()
         hadoop_streaming_path = self.get_streaming_path()
 
-        general_option = self.__generage_general_commands(cache_file)
+        general_option = self.__generate_general_commands(cache_file)
         streaming_option = ["-mapper", mapper, "-reducer", reducer,
                             "-input", input_file, "-output", output]
         commands = [hadoop_path, "jar", hadoop_streaming_path]
@@ -28,7 +28,7 @@ class HadoopStreaming(HadoopBase):
     def get_streaming_path(self):
         return os.path.join(self.HADOOP_HOME, self.HADOOP_STREAMING_PATH)
 
-    def __generage_general_commands(self, cache_file):
+    def __generate_general_commands(self, cache_file):
         general_option = []
         if cache_file:
             if isinstance(cache_file, str):

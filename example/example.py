@@ -1,9 +1,10 @@
 # encoding: utf-8
+import os
 from model.sonar import Sonar
 
 
 class ExampleSonar(Sonar):
-    HADOOP_HOME = "/usr/src/hadoop-2.6.0"
+    HADOOP_HOME = os.environ['HADOOP_HOME']
     HADOOP_STREAMING_PATH = "share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar"
 
     def __init__(self):

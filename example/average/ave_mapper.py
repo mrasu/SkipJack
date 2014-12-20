@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding: utf-8
 from util.stream_input import input_tab_key_value
 from util.stream_output import output_json
