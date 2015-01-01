@@ -5,7 +5,7 @@ import sys
 
 def input_tab_key_value():
     for line in sys.stdin:
-        yield line.split("\t", 1)
+        yield tuple(line.split("\t", 1))
 
 
 def input_tab_key_json():

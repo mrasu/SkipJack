@@ -1,7 +1,7 @@
 # encoding: utf-8
 from abc import ABCMeta
 import os
-from subprocess import Popen
+from subprocess import Popen, PIPE
 from hadoop.base import HadoopBase
 from hadoop.hadoop_exception import HadoopException
 
@@ -20,10 +20,9 @@ class HadoopStreaming(HadoopBase):
         commands.extend(general_option)
         commands.extend(streaming_option)
 
-        print("execute", commands)
-        _, err = Popen(commands).communicate()
+        _, err = self._communicate(commands, stdout=PIPE, stderr=PIPE)
         if err:
-            raise HadoopException(str(err))
+            print(err)
 
     def get_streaming_path(self):
         return os.path.join(self.HADOOP_HOME, self.HADOOP_STREAMING_PATH)

@@ -5,22 +5,22 @@ from hadoop.base import HadoopBase
 from hadoop.hadoop_exception import HadoopException
 
 
-class HadoopDiskFileSystem(HadoopBase):
+class HadoopDistributedFileSystem(HadoopBase):
     __metaclass__ = ABCMeta
 
     def cat(self, file_name):
-        content, err = Popen([self.get_hadoop_path(), "fs", "-cat", file_name], stdout=PIPE).communicate()
+        content, err = self._communicate([self.get_hadoop_path(), "fs", "-cat", file_name], stdout=PIPE, stderr=PIPE)
 
-        if err:
-            raise HadoopException(str(err))
+        if err :
+            print(err)
         return content
 
     def remove_directory(self, directory):
         hadoop_path = self.get_hadoop_path()
 
-        _, err = Popen([hadoop_path, "fs", "-rm", "-r", directory]).communicate()
+        _, err = self._communicate([hadoop_path, "fs", "-rm", "-r", directory], stdout=PIPE, stderr=PIPE)
         if err:
-            raise HadoopException(str(err))
+            print(err)
 
     def remove_directories(self, directories):
         for directory in directories:

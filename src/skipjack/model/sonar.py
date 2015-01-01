@@ -1,10 +1,11 @@
 # encoding: utf-8
 from abc import ABCMeta, abstractmethod
-from hadoop.hdfs import HadoopDiskFileSystem
+from hadoop.hadoop_exception import HadoopException
+from hadoop.hdfs import HadoopDistributedFileSystem
 from hadoop.streaming import HadoopStreaming
 
 
-class Sonar(HadoopDiskFileSystem, HadoopStreaming):
+class Sonar(HadoopDistributedFileSystem, HadoopStreaming):
     __metaclass__ = ABCMeta
 
     def run(self, clean_output_directory=True):
@@ -38,9 +39,15 @@ class Sonar(HadoopDiskFileSystem, HadoopStreaming):
 
     def __clean_output(self, output):
         if isinstance(output, str):
-            self.remove_directory(output)
+            try:
+                self.remove_directory(output)
+            except HadoopException as e:
+                print(e.message)
         else:
-            self.remove_directories(output)
+            try:
+                self.remove_directories(output)
+            except HadoopException as e:
+                print(e.message)
 
     @abstractmethod
     def _do_next(self, count):
