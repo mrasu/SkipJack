@@ -8,14 +8,14 @@ class DummySonar(Sonar):
     HADOOP_HOME = "hadoop"
     HADOOP_STREAMING_PATH = "streaming"
     
-    def _get_in_out_file(self, count):
+    def _get_in_out_file(self, status):
         return "in", "out"
 
-    def _get_map_reduce_file(self, count):
+    def _get_map_reduce_file(self, status):
         return "mapper", "reducer"
 
-    def _do_next(self, count):
-        if count < self.run_count:
+    def _do_next(self, status):
+        if status.get_count() < self.run_count:
             return True
 
 
