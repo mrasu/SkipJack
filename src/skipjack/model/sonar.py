@@ -8,13 +8,20 @@ from model.sonar_status import SonarStatus
 
 class Sonar(HadoopDistributedFileSystem, HadoopStreaming):
     __metaclass__ = ABCMeta
+    
+    def __init__(self, status_class=None):
+        if status_class:
+            self.status_class = status_class
+        else:
+            self.status_class = SonarStatus
 
     def run(self, clean_output_directory=True):
-        status = SonarStatus()
+        status = self.status_class()
 
         self._check()
-        self._init_hadoop()
+        self._init_hadoop(status)
         while self._do_next(status):
+            self._set_status_when_start(status)
             mapper, reducer = self._get_map_reduce_file(status)
 
             input_file, output = self._get_in_out_file(status)
@@ -23,20 +30,30 @@ class Sonar(HadoopDistributedFileSystem, HadoopStreaming):
             if clean_output_directory:
                 self.__clean_output(output)
             self._run_hadoop(mapper, reducer, input_file, output, cache_files)
-            self._validate(status, output)
 
-            status._SonarStatus__increment_count()
+            self.__set_output(status, output)
+            self._set_status_when_end(status)
 
         self._finalize_hadoop()
 
-    def _init_hadoop(self):
+    def _init_hadoop(self, status):
         pass
 
     def _finalize_hadoop(self):
         pass
-
-    def _validate(self, status, output):
+    
+    def _set_status_when_start(self, start):
         pass
+    
+    def _set_status_when_end(self, status):
+        status._SonarStatus__increment_count()
+    
+    def __set_output(self, status, output_directory):
+        output = self.cat(output_directory + "/*")
+        
+        # (CRLF, CR, LF) -> (CR, LF) -> (LF)
+        output = output.replace("\r\n", "\r").replace("\r", "\n").split("\n")
+        status.output = output
 
     def __clean_output(self, output):
         if isinstance(output, str):

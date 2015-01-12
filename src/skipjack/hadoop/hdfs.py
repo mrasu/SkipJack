@@ -1,8 +1,7 @@
 # encoding: utf-8
-from abc import ABCMeta, abstractmethod
-from subprocess import Popen, PIPE
+from abc import ABCMeta
+from subprocess import PIPE
 from hadoop.base import HadoopBase
-from hadoop.hadoop_exception import HadoopException
 
 
 class HadoopDistributedFileSystem(HadoopBase):
@@ -11,7 +10,7 @@ class HadoopDistributedFileSystem(HadoopBase):
     def cat(self, file_name):
         content, err = self._communicate([self.get_hadoop_path(), "fs", "-cat", file_name], stdout=PIPE, stderr=PIPE)
 
-        if err :
+        if err:
             print(err)
         return content
 
@@ -25,3 +24,12 @@ class HadoopDistributedFileSystem(HadoopBase):
     def remove_directories(self, directories):
         for directory in directories:
             self.remove_directory(directory)
+    
+    def put(self, file_name, put_directory):
+        content, err = self._communicate(
+            [self.get_hadoop_path(), "fs", "-put", file_name, put_directory], stdout=PIPE, stderr=PIPE
+        )
+
+        if err:
+            print(err)
+        return content

@@ -28,20 +28,20 @@ class TestSonar(TestCase):
         self.sonar.run_count = run_count
 
         self.sonar._check = MagicMock()
-        self.sonar._HadoopBase__communicate_if_not_mock = MagicMock(return_value=("a", None))
+        self.sonar._HadoopBase__communicate_if_not_mock = MagicMock(return_value=(b"a", None))
         mock = self.sonar._HadoopBase__communicate_if_not_mock
 
         self.sonar.run()
 
         self.assertTrue(self.sonar._check.called)
-        # hadoop実行とアウトプットディレクトリ削除で各job2回実行される
-        self.assertEqual(mock.call_count, run_count * 2)
+        # run, clean, cat result commands are called
+        self.assertEqual(mock.call_count, run_count * 3)
 
     def test_run_no_clean(self):
         run_count = 3
         self.sonar.run_count = run_count
 
-        self.sonar._HadoopBase__communicate_if_not_mock = MagicMock(return_value=("a", None))
+        self.sonar._HadoopBase__communicate_if_not_mock = MagicMock(return_value=(b"a", None))
         mock = self.sonar._HadoopBase__communicate_if_not_mock
 
         self.sonar._check = MagicMock()
@@ -49,4 +49,5 @@ class TestSonar(TestCase):
         self.sonar.run(False)
 
         self.assertTrue(self.sonar._check.called)
-        self.assertEqual(mock.call_count, run_count)
+        # run, cat result commands are called
+        self.assertEqual(mock.call_count, run_count * 2)

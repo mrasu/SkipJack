@@ -22,10 +22,11 @@ class HadoopBase:
         if not self.HADOOP_STREAMING_PATH:
             raise Exception("not set HADOOP_STREAMING_PATH")
 
-    def _communicate(self, *args, **kwargs):
-
+    def _communicate(self, args, **kwargs):
         print("execute", args)
-        content, err = self.__communicate_if_not_mock(*args, **kwargs)
+        content, err = self.__communicate_if_not_mock(args, **kwargs)
+        content = content.decode() if content else None
+        err = err.decode() if err else None
         if err and " INFO " not in err:
             raise HadoopException(str(err))
         return content, err

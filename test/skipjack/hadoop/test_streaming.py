@@ -27,7 +27,7 @@ class TestStreaming(TestCase):
         input_file = "input_file"
         output_file = "output_file"
 
-        self.streaming._HadoopBase__communicate_if_not_mock = MagicMock(return_value=("a", None))
+        self.streaming._HadoopBase__communicate_if_not_mock = MagicMock(return_value=(b"a", None))
         mock = self.streaming._HadoopBase__communicate_if_not_mock
 
         self.streaming._run_hadoop(mapper, reducer, input_file, output_file)
@@ -48,7 +48,7 @@ class TestStreaming(TestCase):
         output_file = "output_file"
         cache_file = "cache_file"
 
-        self.streaming._HadoopBase__communicate_if_not_mock = MagicMock(return_value=("a", None))
+        self.streaming._HadoopBase__communicate_if_not_mock = MagicMock(return_value=(b"a", None))
         mock = self.streaming._HadoopBase__communicate_if_not_mock
     
         self.streaming._run_hadoop(mapper, reducer, input_file, output_file, cache_file=cache_file)
@@ -70,7 +70,7 @@ class TestStreaming(TestCase):
         output_file = "output_file"
         cache_file = ["cache_file", "cache2"]
 
-        self.streaming._HadoopBase__communicate_if_not_mock = MagicMock(return_value=("a", None))
+        self.streaming._HadoopBase__communicate_if_not_mock = MagicMock(return_value=(b"a", None))
         mock = self.streaming._HadoopBase__communicate_if_not_mock
 
         self.streaming._run_hadoop(mapper, reducer, input_file, output_file, cache_file=cache_file)

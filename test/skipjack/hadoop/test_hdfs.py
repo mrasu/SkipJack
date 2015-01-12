@@ -19,7 +19,7 @@ class TestHDFS(TestCase):
         mock.assert_called_with(args, stdout=stdout, stderr=stderr)
 
     def test_cat(self):
-        self.hdfs._HadoopBase__communicate_if_not_mock = MagicMock(return_value=("a", None))
+        self.hdfs._HadoopBase__communicate_if_not_mock = MagicMock(return_value=(b"a", None))
         mock = self.hdfs._HadoopBase__communicate_if_not_mock
         self.hdfs.cat("file_name")
 
@@ -27,7 +27,7 @@ class TestHDFS(TestCase):
         self.communicate_mock_call_with(mock, expected_args)
 
     def test_cat_error(self):
-        self.hdfs._HadoopBase__communicate_if_not_mock = MagicMock(return_value=("a", "WARN errorMessage"))
+        self.hdfs._HadoopBase__communicate_if_not_mock = MagicMock(return_value=(b"a", b"WARN errorMessage"))
         mock = self.hdfs._HadoopBase__communicate_if_not_mock
         self.assertRaises(HadoopException, self.hdfs.cat, "file_name")
 
@@ -35,7 +35,7 @@ class TestHDFS(TestCase):
         self.communicate_mock_call_with(mock, expected_args)
 
     def test_remove_directory(self):
-        self.hdfs._HadoopBase__communicate_if_not_mock = MagicMock(return_value=("a", None))
+        self.hdfs._HadoopBase__communicate_if_not_mock = MagicMock(return_value=(b"a", None))
         mock = self.hdfs._HadoopBase__communicate_if_not_mock
         self.hdfs.remove_directory("file_name")
 
@@ -43,7 +43,7 @@ class TestHDFS(TestCase):
         self.communicate_mock_call_with(mock, expected_args)
 
     def test_remove_directory_error(self):
-        self.hdfs._HadoopBase__communicate_if_not_mock = MagicMock(return_value=("a", "errorMessage"))
+        self.hdfs._HadoopBase__communicate_if_not_mock = MagicMock(return_value=(b"a", b"errorMessage"))
         mock = self.hdfs._HadoopBase__communicate_if_not_mock
         self.assertRaises(HadoopException, self.hdfs.remove_directory, "file_name")
 
@@ -51,7 +51,7 @@ class TestHDFS(TestCase):
         self.communicate_mock_call_with(mock, expected_args)
 
     def test_remove_directories(self):
-        self.hdfs._HadoopBase__communicate_if_not_mock = MagicMock(return_value=("a", None))
+        self.hdfs._HadoopBase__communicate_if_not_mock = MagicMock(return_value=(b"a", None))
         mock = self.hdfs._HadoopBase__communicate_if_not_mock
         
         target_directories = ["dir1", "dir2"]
@@ -64,7 +64,7 @@ class TestHDFS(TestCase):
         mock.assert_has_calls(expected_calls)
 
     def test_remove_directories_error(self):
-        self.hdfs._HadoopBase__communicate_if_not_mock = MagicMock(return_value=("a", "errorMessage"))
+        self.hdfs._HadoopBase__communicate_if_not_mock = MagicMock(return_value=(b"a", b"errorMessage"))
         mock = self.hdfs._HadoopBase__communicate_if_not_mock
 
         target_directories = ["dir1", "dir2"]
@@ -74,7 +74,7 @@ class TestHDFS(TestCase):
         mock.assert_called_once_with(common_args + ["dir1"], stdout=PIPE, stderr=PIPE)
 
     def test_remove_directories_only_one_directory(self):
-        self.hdfs._HadoopBase__communicate_if_not_mock = MagicMock(return_value=("a", None))
+        self.hdfs._HadoopBase__communicate_if_not_mock = MagicMock(return_value=(b"a", None))
         mock = self.hdfs._HadoopBase__communicate_if_not_mock
 
         target_directories = ["dir1"]
